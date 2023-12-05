@@ -54,4 +54,3 @@ export async function sendConfirmedReceivedEmail(receipient, fName) {
 
 }
 
-sendConfirmedReceivedEmail("oderapower@gmail.com", "Odera")
