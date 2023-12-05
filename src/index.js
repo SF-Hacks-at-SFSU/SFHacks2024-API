@@ -3,7 +3,7 @@ import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 import { createHmac } from "crypto";
-import { sendConfirmedReceivedEmail } from "./send_email";
+import { sendConfirmedReceivedEmail } from "./send_email.js";
 
 //get enviroment configuration
 dotenv.config();
