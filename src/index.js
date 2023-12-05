@@ -28,10 +28,12 @@ app.post("/webhook/send-received-app-email", (req, res) => {
     .digest("base64");
 
   // Compare the received signature with the calculated signature.
-  if (receivedSignature !== calculatedSignature) {
+  if (receivedSignature === calculatedSignature) {
+    // Signature is valid, process the webhook payload
+    res.status(200).send('Webhook received and processed successfully.');
+  } else {
     // Signature is invalid, reject the webhook request
-    res.status(401).send("Invalid signature.");
-    return;
+    res.status(401).send('Invalid signature.');
   }
 
   console.log(webhookPayload)
