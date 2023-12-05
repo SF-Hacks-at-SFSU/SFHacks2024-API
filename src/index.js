@@ -45,7 +45,7 @@ app.post("/webhook/send-received-app-email", async (req, res) => {
        
       }
       if (field["key"]== "question_rj1JeM") {
-        name = field["value"]
+        fname = field["value"]
        
       }
     }
