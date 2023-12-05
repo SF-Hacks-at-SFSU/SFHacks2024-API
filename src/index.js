@@ -22,7 +22,7 @@ app.post("/webhook/send-received-app-email", async (req, res) => {
 try {
     console.log("Received Tally.so event:", req.url )
     const webhookPayload = req.body;
-    const receivedToken = req.headers["tally-signature"];
+    const receivedSignature = req.headers["tally-signature"];
     
   
     const calculatedSignature = createHmac(
@@ -33,7 +33,7 @@ try {
       .digest("base64");
   
     // Compare the received signature with the calculated signature.
-    if (!(calculatedSignature == process.env.TALLY_SIGNING_SECRET)) {
+    if (!(calculatedSignature == receivedSignature)) {
       // Signature is valid, process the webhook payload
       res.sendStatus(401)
       return
