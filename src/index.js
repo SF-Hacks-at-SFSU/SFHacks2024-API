@@ -3,6 +3,8 @@ import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 import { createHmac } from "crypto";
+import { sendConfirmedReceivedEmail } from "./send_email.js";
+
 
 //get enviroment configuration
 dotenv.config();
@@ -35,22 +37,20 @@ app.post("/webhook/send-received-app-email", async (req, res) => {
     res.status(401).send('Invalid signature.');
     
   } 
-  
-  console.log(webhookPayload)
-  let email =  "";
+  let fname =  "";
     let receipient = ""
     for (const field of webhookPayload['data']['fields']) {
       if (field["key"]== "question_2Eylpp") {
-        email = field["value"]
+        receipient = field["value"]
        
       }
       if (field["key"]== "question_rj1JeM") {
-        receipient = field["value"]
+        name = field["value"]
        
       }
     }
   
-    await sendConfirmedReceivedEmail(receipient, email)
+    await sendConfirmedReceivedEmail(receipient, fname)
     res.status(200).send('Webhook received and processed successfully.');
 
   
