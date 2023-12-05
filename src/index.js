@@ -3,6 +3,7 @@ import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 import { createHmac } from "crypto";
+
 //get enviroment configuration
 dotenv.config();
 
@@ -19,22 +20,22 @@ app.post("/webhook/send-received-app-email", (req, res) => {
     console.log("Received Tally.so event:", req.url )
   const webhookPayload = req.body;
   const receivedSignature = req.headers["tally-signature"];
+  console.log("Tally Signature:", receivedSignature)
 
   const calculatedSignature = createHmac(
     "sha256",
     process.env.TALLY_SIGNING_SECRET
   )
-    .update(JSON.stringify(webhookPayload))
-    .digest("base64");
 
   // Compare the received signature with the calculated signature.
   if (receivedSignature === calculatedSignature) {
     // Signature is valid, process the webhook payload
     res.status(200).send('Webhook received and processed successfully.');
+    console.log(webhookPayload)
   } else {
     // Signature is invalid, reject the webhook request
     res.status(401).send('Invalid signature.');
   }
 
-  console.log(webhookPayload)
+  
 });
