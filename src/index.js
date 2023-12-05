@@ -34,9 +34,5 @@ app.post("/webhook/send-received-app-email", (req, res) => {
     return;
   }
 
-  const recepient_email = webhookPayload["data"]["fields"]
-  
-
-  
-
+  console.log(webhookPayload)
 });
