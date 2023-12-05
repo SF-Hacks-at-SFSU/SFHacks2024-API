@@ -3,7 +3,6 @@ import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 import { createHmac } from "crypto";
-import { sendConfirmedReceivedEmail } from "./send_email.js";
 
 //get enviroment configuration
 dotenv.config();
@@ -17,18 +16,28 @@ app.listen(process.env.PORT, () => {
 });
 
 //Sends an email confirming that the recepients application has been sent. Only Tally.so webhooks should be allowed to access the route.
-app.post("/webhook/send-received-app-email", (req, res) => {
-try {
-      console.log("Received Tally.so event:", req.url )
-    
-    
-    const webhookPayload = req.body;
-    const receivedToken = req.headers["api-token"];
-    // Compare the received token with the calculated token.
-    //TODO implement HMac function
-    if (!(receivedToken === process.env.TALLY_SIGNING_SECRET)) res.status(401).send('Invalid signature.');
+app.post("/webhook/send-received-app-email", async (req, res) => {
+    console.log("Received Tally.so event:", req.url )
+  const webhookPayload = req.body;
+  const receivedToken = req.headers["api-token"];
   
-    let email =  "";
+
+  const calculatedSignature = createHmac(
+    "sha256",
+    process.env.TALLY_SIGNING_SECRET
+  )
+    .update(JSON.stringify(webhookPayload))
+    .digest("base64");
+
+  // Compare the received signature with the calculated signature.
+  if (!(calculatedSignature == process.env.TALLY_SIGNING_SECRET)) {
+    // Signature is valid, process the webhook payload
+    res.status(401).send('Invalid signature.');
+    
+  } 
+  
+  console.log(webhookPayload)
+  let email =  "";
     let receipient = ""
     for (const field of webhookPayload['data']['fields']) {
       if (field["key"]== "question_2Eylpp") {
@@ -41,13 +50,8 @@ try {
       }
     }
   
-    sendConfirmedReceivedEmail(receipient, email)
-    
+    await sendConfirmedReceivedEmail(receipient, email)
+    res.status(200).send('Webhook received and processed successfully.');
+
   
-  
-    
-} catch (error) {
-  console.log("Error:", error)
-  res.statusCode(500)
-}
 });
