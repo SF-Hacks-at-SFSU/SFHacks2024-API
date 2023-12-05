@@ -13,7 +13,9 @@ app.listen(process.env.PORT, () => {
   console.log(`Listening on http://localhost:${process.env.PORT}/`);
 });
 
+//Sends an email confirming that the recepients application has been sent. Only Tally.so webhooks should be allowed to access the route.
 app.post("webhook/send-received-app-email", (req, res) => {
+    console.log("Received Tally.so event:", req.url )
   const webhookPayload = req.body;
   const receivedSignature = req.headers["tally-signature"];
 
@@ -24,15 +26,16 @@ app.post("webhook/send-received-app-email", (req, res) => {
     .update(JSON.stringify(webhookPayload))
     .digest("base64");
 
-  // Compare the received signature with the calculated signature
+  // Compare the received signature with the calculated signature.
   if (receivedSignature !== calculatedSignature) {
-     // Signature is invalid, reject the webhook request
-     res.status(401).send("Invalid signature.");
-     return;
+    // Signature is invalid, reject the webhook request
+    res.status(401).send("Invalid signature.");
+    return;
   }
+
+  const recepient_email = webhookPayload["data"]["fields"]
   
 
-
-
   
+
 });
