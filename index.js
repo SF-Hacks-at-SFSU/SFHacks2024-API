@@ -14,7 +14,7 @@ app.listen(process.env.PORT, () => {
 });
 
 //Sends an email confirming that the recepients application has been sent. Only Tally.so webhooks should be allowed to access the route.
-app.post("webhook/send-received-app-email", (req, res) => {
+app.post("/webhook/send-received-app-email", (req, res) => {
     console.log("Received Tally.so event:", req.url )
   const webhookPayload = req.body;
   const receivedSignature = req.headers["tally-signature"];
