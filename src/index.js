@@ -19,39 +19,43 @@ app.listen(process.env.PORT, () => {
 
 //Sends an email confirming that the recepients application has been sent. Only Tally.so webhooks should be allowed to access the route.
 app.post("/webhook/send-received-app-email", async (req, res) => {
+try {
     console.log("Received Tally.so event:", req.url )
-  const webhookPayload = req.body;
-  const receivedToken = req.headers["api-token"];
-  
-
-  const calculatedSignature = createHmac(
-    "sha256",
-    process.env.TALLY_SIGNING_SECRET
-  )
-    .update(JSON.stringify(webhookPayload))
-    .digest("base64");
-
-  // Compare the received signature with the calculated signature.
-  if (!(calculatedSignature == process.env.TALLY_SIGNING_SECRET)) {
-    // Signature is valid, process the webhook payload
-    res.status(401).send('Invalid signature.');
+    const webhookPayload = req.body;
+    const receivedToken = req.headers["api-token"];
     
-  } 
-  let fname =  "";
-    let receipient = ""
-    for (const field of webhookPayload['data']['fields']) {
-      if (field["key"]== "question_2Eylpp") {
-        receipient = field["value"]
-       
-      }
-      if (field["key"]== "question_rj1JeM") {
-        fname = field["value"]
-       
-      }
-    }
   
-    await sendConfirmedReceivedEmail(receipient, fname)
-    res.status(200).send('Webhook received and processed successfully.');
-
+    const calculatedSignature = createHmac(
+      "sha256",
+      process.env.TALLY_SIGNING_SECRET
+    )
+      .update(JSON.stringify(webhookPayload))
+      .digest("base64");
   
+    // Compare the received signature with the calculated signature.
+    if (!(calculatedSignature == process.env.TALLY_SIGNING_SECRET)) {
+      // Signature is valid, process the webhook payload
+      res.sendStatus(401)
+      return
+    } 
+    let fname =  "";
+      let receipient = ""
+      for (const field of webhookPayload['data']['fields']) {
+        if (field["key"]== "question_2Eylpp") {
+          receipient = field["value"]
+         
+        }
+        if (field["key"]== "question_rj1JeM") {
+          fname = field["value"]
+         
+        }
+      }
+    
+      await sendConfirmedReceivedEmail(receipient, fname)
+      res.sendStatus(200)
+  
+    
+} catch (error) {
+  res.sendStatus(500)
+}
 });
