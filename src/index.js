@@ -22,7 +22,7 @@ app.post("/webhook/send-received-app-email", async (req, res) => {
 try {
     console.log("Received Tally.so event:", req.url )
     const webhookPayload = req.body;
-    const receivedToken = req.headers["api-token"];
+    const receivedToken = req.headers["tally-signature"];
     
   
     const calculatedSignature = createHmac(
