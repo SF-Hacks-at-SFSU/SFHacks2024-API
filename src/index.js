@@ -22,12 +22,12 @@ app.post("/webhook/send-received-app-email", async (req, res) => {
 try {
     console.log("Received Tally.so event:", req.url )
     const webhookPayload = req.body;
-    const receivedSignature = req.headers["tally-signature"];
+    const signature = request.headers['typeform-signature']
     
   
     const calculatedSignature = createHmac(
       "sha256",
-      process.env.TALLY_SIGNING_SECRET
+      process.env.TYPEFORM_SIGNING_SECRET
     )
       .update(JSON.stringify(webhookPayload))
       .digest("base64");
@@ -38,20 +38,22 @@ try {
       res.sendStatus(401)
       return
     } 
-    let fname =  "";
-      let receipient = ""
-      for (const field of webhookPayload['data']['fields']) {
-        if (field["key"]== "question_2Eylpp") {
-          receipient = field["value"]
+
+    console.log(webhookPayload)
+    // let fname =  "";
+    //   let receipient = ""
+    //   for (const field of webhookPayload['data']['form_response']["definition"]["fields"]) {
+    //     if (field["id"]== "") {
+    //       receipient = field["value"]
          
-        }
-        if (field["key"]== "question_rj1JeM") {
-          fname = field["value"]
+    //     }
+    //     if (field["key"]== "question_rj1JeM") {
+    //       fname = field["value"]
          
-        }
-      }
+    //     }
+    //   }
     
-      await sendConfirmedReceivedEmail(receipient, fname)
+    //   await sendConfirmedReceivedEmail(receipient, fname)
       res.sendStatus(200)
   
     
