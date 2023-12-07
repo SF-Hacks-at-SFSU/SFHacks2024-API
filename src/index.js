@@ -30,7 +30,7 @@ try {
       "sha256",
       process.env.TYPEFORM_SIGNING_SECRET
     )
-      .update(req.body.toStrin())
+      .update(req.body.toString())
       .digest("base64");
   
     // Compare the received signature with the calculated signature.
