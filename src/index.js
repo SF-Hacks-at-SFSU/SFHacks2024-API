@@ -22,7 +22,7 @@ app.listen(process.env.PORT, () => {
 app.post("/webhook/send-received-app-email", async (req, res) => {
 try {
     console.log("Received Tally.so event:", req.url )
-    const webhookPayload = req.body.toStrin();
+    const webhookPayload = req.body.toString();
     const receivedSignature = req.headers['typeform-signature']
     
   
