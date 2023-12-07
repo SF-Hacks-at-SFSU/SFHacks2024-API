@@ -22,7 +22,7 @@ app.listen(process.env.PORT, () => {
 app.post("/webhook/send-received-app-email", async (req, res) => {
 try {
     console.log("Received Tally.so event:", req.url )
-    const webhookPayload = req.body;
+    const webhookPayload = req.body.toStrin();
     const receivedSignature = req.headers['typeform-signature']
     
   
@@ -30,11 +30,11 @@ try {
       "sha256",
       process.env.TYPEFORM_SIGNING_SECRET
     )
-      .update(JSON.stringify(webhookPayload))
+      .update(req.body.toStrin())
       .digest("base64");
   
     // Compare the received signature with the calculated signature.
-    if (!(calculatedSignature == receivedSignature)) {
+    if (!(`sha256=${calculatedSignature}` === receivedSignature)) {
       // Signature is valid, process the webhook payload
       res.sendStatus(401)
       return
