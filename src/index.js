@@ -11,6 +11,7 @@ dotenv.config();
 
 const PORT = process.env.API_KEY;
 var app = express();
+app.use(express.bodyParser({limit: '50mb'}));
 app.use(express.json());
 
 app.listen(process.env.PORT, () => {
