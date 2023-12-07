@@ -14,6 +14,7 @@ const PORT = process.env.API_KEY;
 var app = express();
 app.use(bodyParser.json({limit: '50mb'}));  
 
+
 app.listen(process.env.PORT, () => {
   console.log(`Listening on http://localhost:${process.env.PORT}/`);
 });
@@ -21,16 +22,16 @@ app.listen(process.env.PORT, () => {
 //Sends an email confirming that the recepients application has been sent. Only Tally.so webhooks should be allowed to access the route.
 app.post("/webhook/send-received-app-email", async (req, res) => {
 try {
-    console.log("Received Tally.so event:", req.url )
-    const webhookPayload = req.body.toString();
-    const receivedSignature = req.headers['typeform-signature']
+    console.log("Received Typeform event:", req.url )
+    const payload = req.body;
+    const receivedSignature = req.headers['Typeform-Signature']
     
   
     const calculatedSignature = createHmac(
       "sha256",
       process.env.TYPEFORM_SIGNING_SECRET
     )
-      .update(req.body.toString())
+      .update(JSON.stringify(payload))
       .digest("base64");
   
     // Compare the received signature with the calculated signature.
