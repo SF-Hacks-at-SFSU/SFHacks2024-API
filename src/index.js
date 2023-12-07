@@ -60,5 +60,6 @@ try {
     
 } catch (error) {
   res.sendStatus(500)
+  console.log(error)
 }
 });
