@@ -4,6 +4,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { createHmac } from "crypto";
 import { sendConfirmedReceivedEmail } from "./send_email.js";
+import bodyParser from "body-parser";
 
 
 //get enviroment configuration
@@ -11,8 +12,7 @@ dotenv.config();
 
 const PORT = process.env.API_KEY;
 var app = express();
-app.use(express.bodyParser({limit: '50mb'}));
-app.use(express.json());
+app.use(bodyParser.json({limit: '50mb'}));  
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on http://localhost:${process.env.PORT}/`);
