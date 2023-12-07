@@ -3,10 +3,7 @@ import dotenv from "dotenv";
 
 //get enviroment configuration
 dotenv.config();
-
 import fs from "fs/promises";
-
-
 
 /**
  * 
@@ -15,7 +12,7 @@ import fs from "fs/promises";
  * @description This function will send a confirmation email to the `receipient`. 
  */
 export async function sendConfirmedReceivedEmail(receipient, fName) {
-  const filePath = "src/received-email.html";
+  const filePath = "src/assets/received-email.html";
   try {
     //Read the HTML file containing the formatting and format it with our given variables. 
     //TODO Implement HTML with AMP4
