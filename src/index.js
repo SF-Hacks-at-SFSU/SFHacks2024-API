@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 
-app.post("/email", emailRoutes) ;
+app.use("/email", emailRoutes) ;
 
 app.listen(PORT, () => {
   console.log(chalk.green(`Server is running on port ${PORT} `));
