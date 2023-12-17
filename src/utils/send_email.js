@@ -23,6 +23,7 @@ export async function sendConfirmedReceivedEmail(receipient, fName) {
     const transporter = nodemailer.createTransport({
       service: 'mail.privateemail.com',
       port: process.env.EMAIL_PORT,
+      secure: true,
       auth: {
         user: process.env.EMAIL_ACCOUNT,
         pass: process.env.EMAIL_PASSWORD_KEY,
