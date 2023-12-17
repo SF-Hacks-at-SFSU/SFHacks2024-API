@@ -17,7 +17,7 @@ export async function sendConfirmedReceivedEmail(receipient, fName) {
     //Read the HTML file containing the formatting and format it with our given variables.
     //TODO Implement HTML with AMP4
     let htmlString = await fs.readFile(filePath, "utf8");
-    htmlString = htmlString.replace(/\[FIRST NAME\]/g, fName);
+    htmlString = htmlString.replace(/\[FIRST_NAME\]/g, fName);
 
     //Authentication for our sending email.
     const transporter = nodemailer.createTransport({
