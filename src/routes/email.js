@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sendConfirmedReceivedEmail } from "../utils/send_email";
+import { sendConfirmedReceivedEmail } from "../utils/send_email.js";
 
 let _router = Router();
 
