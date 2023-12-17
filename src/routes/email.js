@@ -36,7 +36,7 @@ _router.get("/confirm-registeration-application-received", async (req, res) => {
 });
 
 //Sends an email confirming that the recepients application has been sent. Only Typeform webhooks should be allowed to access the route.
-_router.get("/confirm-registeration", async (req, res) => {
+_router.post("/confirm-registeration", async (req, res) => {
   try {
     
     const signature = req.headers["typeform-signature"];
