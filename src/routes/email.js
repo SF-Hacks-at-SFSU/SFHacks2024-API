@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { sendConfirmedReceivedEmail } from "../utils/send_email.js";
+import { verifySignature } from "../utils/verification.js";
 
 let _router = Router();
 
@@ -9,7 +10,7 @@ _router.post("/confirm-registeration-application-received", async (req, res) => 
     const payload = JSON.parse(req.body.toString());
     const signature = req.headers["typeform-signature"];
     const isValid = verifySignature(signature, req.body.toString());
-
+    
     if (!isValid) {
       // Signature is not valid, bounce back unauthorized
       res.sendStatus(401);
