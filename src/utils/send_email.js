@@ -21,7 +21,8 @@ export async function sendConfirmedReceivedEmail(receipient, fName) {
 
     //Authentication for our sending email.
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: 'mail.privateemail.com',
+      port: process.env.EMAIL_PORT,
       auth: {
         user: process.env.EMAIL_ACCOUNT,
         pass: process.env.EMAIL_PASSWORD_KEY,
