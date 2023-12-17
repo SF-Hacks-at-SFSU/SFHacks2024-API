@@ -32,7 +32,7 @@ _router.post("/confirm-registeration-application-received", async (req, res) => 
     res.sendStatus(200);
   } catch (error) {
     res.sendStatus(500);
-    console.log(error);
+    console.error(error);
   }
 });
 
