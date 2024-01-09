@@ -12,10 +12,9 @@ import fs from "fs/promises";
  * @description This function will send a confirmation email to the `receipient`.
  */
 export async function sendConfirmedReceivedEmail(receipient, fName) {
-  const filePath = "src/assets/received-email.html";
+  const filePath = "assets/received-email.html";
   try {
     //Read the HTML file containing the formatting and format it with our given variables.
-    //TODO Implement HTML with AMP4
     let htmlString = await fs.readFile(filePath, "utf8");
     htmlString = htmlString.replace(/\[FIRST_NAME\]/g, fName);
 

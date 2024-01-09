@@ -12,7 +12,7 @@ _router.post("/confirm-registeration-application-received", async (req, res) => 
     const isValid = verifySignature(signature, req.body.toString());
     
     if (!isValid) {
-      // Signature is not valid, bounce back unauthorized
+      // Signature is not valid, bounce back unauthorized.
       res.sendStatus(401);
       return;
     }
@@ -20,15 +20,17 @@ _router.post("/confirm-registeration-application-received", async (req, res) => 
     var fName = "";
     var receipient = "";
     for (const answer of payload["form_response"]["answers"]) {
-      //get email by checking entries email ID
+      //get email by checking entries email id.
       if (answer["field"]["id"] == "JV6k42Qo04CQ") receipient = answer["email"];
 
-      //get first name by checking entries id
+      //get first name by checking entries id.
       if (answer["field"]["id"] == "TVV0PNJZg9Mz") fName = answer["text"];
     }
 
-    //Sends email of confirmation
+    //Sends email of confirmation.
     await sendConfirmedReceivedEmail(receipient, fName);
+
+    //TODO Format response and send to FB
     res.sendStatus(200);
   } catch (error) {
     res.sendStatus(500);
@@ -36,7 +38,10 @@ _router.post("/confirm-registeration-application-received", async (req, res) => 
   }
 });
 
-//Sends an email confirming that the recepients application has been sent. Only Typeform webhooks should be allowed to access the route.
-_router.post("/confirm-registeration", async (req, res) => {});
 
-export const emailRoutes = _router;
+
+
+
+
+
+export const webhookRoutes = _router;
